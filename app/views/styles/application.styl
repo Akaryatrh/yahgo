@@ -57,6 +57,9 @@ body
         &.loading
             opacity 1
 
+            &+ #header-container + #nav-container + #page-container #refreshPage
+                height 50px
+
         position fixed
         top calc(50% \- 35px)
         display none
@@ -83,14 +86,31 @@ body
           -webkit-animation-duration 1.5s
           -webkit-animation-iteration-count infinite
           -webkit-animation-timing-function linear
+
+          
     
     
     /*
      * ITEMS
      */
 
-    .items
+    #page-container
         margin-top: 40px
+
+        #refreshPage
+            height 0
+            overflow hidden
+            position relative
+            transition all .2s ease-in-out
+
+            .pull
+                text-align center
+                noveCento noveN, 16px, #999
+                position absolute
+                bottom 0
+                width 100%
+
+    .items
 
         .item
     

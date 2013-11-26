@@ -9,6 +9,3 @@ module.exports = class ItemsView extends CollectionView
   region: 'items'
   tagName: 'div'
   className: 'items'
-    
-    
-

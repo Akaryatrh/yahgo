@@ -1,4 +1,4 @@
-
+siteController = require 'controllers/site-controller'
 canvasHelper =
 
   # Takes a canvas element, and fill it with image data 
@@ -27,25 +27,21 @@ canvasHelper =
       el.addEventListener "scroll", =>
         @checkScrollPos @
       ,false
-      console.log @lastScrollTop
+
       #el.addEventListener "resize", @resizeAllCanvas, false
 
 
     checkScrollPos : (_this) ->
-      console.log _this
       header = $("header")
+      preloader = $("#wrapper #preloader")
       scrollTop = $(window).scrollTop()
-      console.log ">-------------------------------------------"
-      console.log "_this.lastScrollTop"
-      console.log _this.lastScrollTop
-      console.log "scrollTop"
-      console.log scrollTop
       
+      if (scrollTop < 0) && (!preloader.hasClass "loading")
+        _this.showRefresh(scrollTop)
+
       if scrollTop >= _this.lastScrollTop
-        console.log "scrolled down"
         header.removeClass "showMe"
       else
-        console.log "scrolled up"
         header.addClass "showMe"
         
       
@@ -61,6 +57,25 @@ canvasHelper =
     resizeAllCanvas : ->
       $("#page-container .items .item .imgContainer canvas").each ->
         canvasHelper.resizeCanvasToContainer $(this)
+
+
+    showRefresh : (scrollTop)->
+      maxHeight = 55
+      refreshModule = $("#refreshPage")
+
+      if refreshModule.height() < maxHeight
+        refreshModule.height((scrollTop * -1) * 2)
+
+      else
+        currentPage =
+          section: Backbone.history.fragment
+        Chaplin.mediator.publish 'refresh', currentPage
+        #refreshModule.animate {height: 0}, 250
+
+
+
+
+
         
 # Prevent creating new properties and stuff.
 Object.seal? canvasHelper

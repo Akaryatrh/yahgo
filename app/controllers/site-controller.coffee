@@ -10,24 +10,30 @@ preloader = require 'views/templates/preloader'
 
 module.exports = class SiteController extends Controller
 
+  # Gives class the ability to pub/sub events
+  _(@prototype).extend Chaplin.EventBroker
+
   beforeAction: ->
     topics = Topics.countries[Topics.defaultCountry]
     @compose 'site', SiteView
     @compose 'header', HeaderView
     @compose 'nav', NavView, topics: topics
+
     
     if @items is undefined
       @items = new ItemsCollection null
       @itemsView = new ItemsView collection: @items
 
+    #Chaplin.mediator.subscribe 'refresh', @showSection
+    @subscribeEvent 'refresh', @showSection
 
-  index: ->
+  showSection : (params) =>
+    console.log @
     @togglePreloader(true)
-    console.log "test"
-    @items.fetch().then =>
+    @items.fetch(params).then =>
       @togglePreloader()
       @itemsView
-    
+
     
     # Fill canvas.
     ###
@@ -36,11 +42,6 @@ module.exports = class SiteController extends Controller
     ###
     #@fillCanvas @itemsView.collection.models
 
-  showSection : (params) ->
-    @togglePreloader(true)
-    @items.fetch(params).then =>
-      @togglePreloader()
-      @itemsView
   
   togglePreloader: (show) ->
     # Preloader can't stay in front (prevent access to news links)
