@@ -1,10 +1,10 @@
 express = require 'express'
 request = require 'request'
-app = express()
-
-app.use(express.static __dirname+'/public')
 
 exports.startServer = (port, path, callback) ->
+
+  app = express()
+  app.use(express.static __dirname+'/public')
 
   # Request image and convert it to base64
   app.get '/encode64/:imgURL', (req, res) ->
@@ -46,5 +46,5 @@ exports.startServer = (port, path, callback) ->
   app.get '*', (req, res) ->
     res.sendfile './public/index.html'
 
-  app.listen port
+  app.listen port, callback
   console.log 'Express server started on port '+port

@@ -1,4 +1,4 @@
-HomePageView = require 'views/home-page-view'
+HomePageView = require './app/views/home-page-view'
 
 describe 'HomePageView', ->
   beforeEach ->
